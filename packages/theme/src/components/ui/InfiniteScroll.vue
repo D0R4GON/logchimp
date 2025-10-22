@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
-import { useInfiniteScroll } from "@vueuse/core";
+import { useInfiniteScroll, useOnline } from "@vueuse/core";
 
 // components
 import ClientError from "./ClientError.vue";
@@ -74,8 +74,10 @@ watch(
   },
 );
 
+const online = useOnline();
+
 function executeInfiniteScroll() {
-  if (props.state === "COMPLETED" || props.state === "ERROR") return;
+  if (props.state === "COMPLETED" || props.state === "ERROR" || !online.value) return;
   props.onInfinite();
 }
 
