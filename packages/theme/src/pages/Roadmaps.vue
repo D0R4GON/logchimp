@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { ref, useTemplateRef, onMounted } from "vue";
 import { useHead } from "@vueuse/head";
-import { useInfiniteScroll } from "@vueuse/core";
+import { useOnline, useInfiniteScroll } from "@vueuse/core";
 import type { IPaginatedRoadmapsResponse, IRoadmap } from "@logchimp/types";
 
 // modules
@@ -77,9 +77,11 @@ async function getRoadmaps(after: string | undefined, isScroll = false) {
   }
 }
 
+const online = useOnline()
 useInfiniteScroll(
   roadmapElement,
   async () => {
+    if (!online.value) return;
     getRoadmaps(endCursor.value, true);
   },
   {
