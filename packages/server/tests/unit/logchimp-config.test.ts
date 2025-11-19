@@ -126,9 +126,7 @@ describe("ConfigManager cez public API", () => {
         const mod = await import("../../src/utils/logchimpConfig");
         const config = mod.configManager.getConfig();
 
-        // zo suboru, ENV to neprepise
-        expect(config.serverHost).toBe("from-file");
-
+        expect(config.serverHost).toBe("from-file"); // zo suboru, ENV to neprepise
         // ENV ma nizsiu prioritu, takze ocekavame hodnotu zo suboru
         expect(config.cacheUrl).toBe("redis://file");
     });
@@ -142,24 +140,15 @@ describe("ConfigManager cez public API", () => {
         const existsSyncMock = (fsModule as any).existsSync as Mock;
         const readJsonMock = (fsExtraModule as any).readJsonSync as Mock;
 
-        // simulujeme ze config subor NEEXISTUJE → berieme len ENV
+        // simulujeme ze config subor NEEXISTUJE -> berieme len ENV
         existsSyncMock.mockReturnValue(false);
-
-        // 1. krok — ENV ma hodnotu "first"
-        process.env.LOGCHIMP_VALKEY_URL = "redis://first";
-
-        // načítanie modulu (prvé getConfig)
-        const mod = await import("../../src/utils/logchimpConfig");
-
+        process.env.LOGCHIMP_VALKEY_URL = "redis://first"; // 1. krok -> ENV ma hodnotu "first"
+        const mod = await import("../../src/utils/logchimpConfig");// načítanie modulu (prvé getConfig)
         const firstConfig = mod.configManager.getConfig();
         expect(firstConfig.cacheUrl).toBe("redis://first");
 
-        // 2. krok — zmeníme ENV na "second"
-        process.env.LOGCHIMP_VALKEY_URL = "redis://second";
-
-        // reload by mal prečítať nové ENV
-        mod.configManager.reload();
-
+        process.env.LOGCHIMP_VALKEY_URL = "redis://second"; // 2. krok -> zmeníme ENV na "second"
+        mod.configManager.reload();// reload by mal prečítať nové ENV
         const secondConfig = mod.configManager.getConfig();
         expect(secondConfig.cacheUrl).toBe("redis://second");
     });
@@ -178,7 +167,6 @@ describe("ConfigManager cez public API", () => {
 
         // nastavime ENV pre SSL
         process.env.LOGCHIMP_DB_SSL = "true";
-
         const mod = await import("../../src/utils/logchimpConfig");
         const config = mod.configManager.getConfig();
 

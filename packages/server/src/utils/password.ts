@@ -1,11 +1,24 @@
 import bcrypt from "bcryptjs";
 
-export function hashPassword(password: string): string {
+// export function hashPassword(password: string): string {
+//   if (typeof password !== "string" || !password.trim()) {
+//     return null;
+//   }
+
+//   const bcryptSaltRounds = 10;
+//   const bcryptSalt = bcrypt.genSaltSync(bcryptSaltRounds);
+//   return bcrypt.hashSync(password, bcryptSalt);
+// }
+
+export function hashPassword(
+  password: string,
+  saltRounds?: number
+): string {
   if (typeof password !== "string" || !password.trim()) {
     return null;
   }
 
-  const bcryptSaltRounds = 10;
+  const bcryptSaltRounds = saltRounds || 10;   
   const bcryptSalt = bcrypt.genSaltSync(bcryptSaltRounds);
   return bcrypt.hashSync(password, bcryptSalt);
 }

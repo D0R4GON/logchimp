@@ -10,11 +10,19 @@ test("Hash empty string as password", () => {
   expect(hash).toBeNull();
 });
 
+// test("Validate hash random password", async () => {
+//   const password = nanoid(10);
+//   const hash = hashPassword(password);
+//   const validPassword = await validatePassword(password, hash);
+
+//   expect(validPassword).toBeTruthy();
+// });
+
 test("Validate hash random password", async () => {
   const password = nanoid(10);
-  const hash = hashPassword(password);
+  const LOW_SALT_ROUNDS_FOR_TESTING = 5; 
+  const hash = hashPassword(password, LOW_SALT_ROUNDS_FOR_TESTING);
   const validPassword = await validatePassword(password, hash);
-
   expect(validPassword).toBeTruthy();
 });
 
